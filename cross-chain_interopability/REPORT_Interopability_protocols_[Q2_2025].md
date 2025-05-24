@@ -20,6 +20,38 @@ Wormhole (launched 2021 by Jump Crypto) is a leading general-purpose cross-chain
 
 Wormhole’s model is **lock-and-mint** (or burn-and-release) with fragmented liquidity: assets are escrowed on the source chain and wrapped on the destination. Thus there is no unified liquidity pool – each chain’s Wormhole vault holds its own tokens. Transfers historically required waiting for multiple confirmations (often a few minutes) plus Guardian signature aggregation. In practice bridging could take on the order of 5–15 minutes under the original Wormhole, though fees were generally just gas plus a small bridge fee. (Wormhole’s new **Settlement** product (2025) offers *near-instant* bridging by using an intent/solver model, but this is still in pilot.)
 
+In addition to its classic lock‑and‑mint “Token Bridge,” Wormhole now offers:
+
+**Native Token Transfers (NTT)** – NTT lets issuers deploy a single native token contract across multiple chains. Transfers are driven by VAAs (no wrapped assets), preserving on‑chain fungibility and simplifying custody.
+
+**Wormhole Connect** – a plug‑and‑play React widget for end‑users to initiate cross‑chain transfers without custom UI work.
+
+**Wormhole Settlement** – an intent‑based, fast‑finality layer for institutional flows, using solver networks atop the Guardian messaging layer.
+
+**MultiGov** – a hub‑and‑spoke governance framework for DAOs to coordinate proposals and upgrades across chains
+
+**Native Token Transfers (NTT) Architecture**  
+NTT is built around Managers and Transceivers on each chain.
+
+Managers (one per token) handle lock/burn logic, emit TransferSent events, enforce customizable rate limits (queuing or reverting excess transfers), and verify message authenticity by collecting a threshold of signatures from Transceivers.
+
+Transceivers route messages off‑chain—using Wormhole relayers or custom back‑ends—quoting delivery fees, forwarding VAAs, and emitting SendTransceiverMessage events.
+
+On arrival, Managers on the destination chain verify the VAA attestation (against the M‑of‑N threshold), then mint or unlock the native tokens in a single step.
+This design requires no wrapped assets and keeps supply synchronized across deployments. Custom transceivers can plug in additional attestation layers if desired
+
+| Aspect                      | Token Bridge (Wrapped)                                      | Native Token Transfers (NTT)                                           |
+| --------------------------- | ----------------------------------------------------------- | ---------------------------------------------------------------------- |
+| **Asset Model**             | Wrapped tokens pegged 1:1, held in per‑chain vaults         | Single native token contract deployed on each chain                    |
+| **Custody**                 | Centralized vaults hold collateral                          | No vaults—mint/burn logic governed by VAA attestations                 |
+| **Metadata Handling**       | Requires up‑front *attestation* (AssetMeta payload)         | Metadata intrinsic to native contract, no separate attestation step    |
+| **Decimals & Precision**    | Truncates to 8 decimals to ensure cross‑chain compatibility | Preserves full precision as defined in native contract                 |
+| **Liquidity Fragmentation** | Each chain’s vault holds its own liquidity                  | Liquidity is unified at the token‑contract level, issuer‑controlled    |
+| **Security Model**          | Guardian multisig (PoA, ≥2/3)                               | Same Guardian consensus for VAA, plus `GlobalAccountant` supply checks |
+| **Use Cases**               | User bridges wrapped assets (DEX liquidity, yield)          | Issuers publish truly native multichain tokens (e.g. WBTC)             |
+
+In summary, Wormhole’s Token Bridge remains the go‑to for wrapped‑asset transfers where custodial vaults are acceptable and broad chain support is needed. By contrast, NTT removes vault custodianship entirely—issuing a single canonical token logic across all chains, with cross‑chain transfers driven by the same VAA mechanism but without extra wrapping steps.
+
 Wormhole’s **security/trust** model is hybrid: it is a permissioned Proof-of-Authority system with no tokenized stakes. The trust assumption is that at least 2/3 of the Guardians are honest and keep their private keys secure. If a majority of guardians collude or are compromised, they could mint arbitrary assets. A real-world exploit illustrates this risk: in Feb 2022 a smart-contract vulnerability (in the Solana bridge contracts) allowed an attacker to bypass signature checks and mint 120,000 wETH (\~\$320M) on Solana without collateral. This hack was due to a coding bug (not a guardian collusion), but it highlights that Wormhole’s security relies on both guardian integrity and correct implementation. Wormhole aims to enhance security over time via threshold signatures and (in future) ZK-based verification. In summary, Wormhole offers wide EVM & non-EVM support, arbitrary messaging, and well-tested bridging, but relies on a semi-trusted guardian set and careful audits of its contracts.
 
 ## Axelar
