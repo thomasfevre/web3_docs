@@ -141,6 +141,17 @@ LayerZero also offers a suite of **Developer Tooling** to streamline development
 **Speed and Fees:** LayerZero messages typically finalize within a couple of minutes, primarily dominated by waiting for block confirmations and the processing by the chosen DVNs and Executors.4 The user generally only pays gas on the source chain call; LayerZero does not require separate fee tokens.4
 
 **Security:** LayerZero v2's security hinges on its modular security framework. The **trust model** is now highly customizable, relying on the configured "X of Y of N" DVN combination to verify messages. The separation of verification and execution means that even if an Executor experiences downtime, the message verification process remains secure and unaffected.3 The immutable core protocol provides intrinsic security against fundamental issues.1 This design empowers applications to control their trust assumptions, balancing security assurances with performance and cost.2
+ 
+ 
+## Skate (formerly Range Protocol / Skatechain)  
+
+**Main Technology Under the Hood:** Positioned as a universal application layer for composable dApps across thousands of blockchains. It leverages intent-driven mechanisms and a Fast Finality Network built on EigenLayer AVS (Actively Validated Services) to achieve a unified application state.  
+**Tokens & Cross-Chain Usage:** Aims to provide seamless cross-chain interactions and liquidity optimization, implying robust token transfer capabilities. While specific mechanisms are not fully detailed for direct user bridging, its focus on unified state suggests underlying support for efficient asset movement.  
+**Unified Liquidity:** One of Skate's primary goals is to eliminate liquidity fragmentation by providing a unified infrastructure where dApps can access and manage liquidity across all connected chains as if they were on a single chain.  
+**General Message Passing:** Yes, Skate's design enables dApps to operate with a single, unified state across thousands of blockchains, which inherently relies on advanced general message passing capabilities.  
+**Duration of Transfer:** Described as offering "rapid transaction finality," but specific transfer durations are not publicly detailed as it's more of an infrastructure layer.  
+**Costs:** Specific cost information for direct bridging transactions is not readily available, as fees would likely depend on applications built on top of the Skate layer.  
+**Security Model:** Inherits security from EigenLayer AVS, benefiting from Ethereum's re-staking security. It also emphasizes rigorous auditing and potentially relies on whitelisted intermediaries within its intent-driven framework.  
 
 ## **Synapse Protocol (additional)**
 
