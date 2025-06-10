@@ -1,4 +1,5 @@
 # **Exemplar of an Off-Chain Decentralized Verifier Network (DVN) for LayerZero's Interoperability Protocol**
+LayerZero article : https://medium.com/layerzero-official/layerzero-v2-explaining-dvns-02e08cce4e80
 
 ## **Introduction**
 
