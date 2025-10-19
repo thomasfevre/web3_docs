@@ -4,3 +4,5 @@
 <br><br>
 
 *Read the full report in the PDF of this folder : *Smart_Accounts_&_Account_Abstraction.pdf*
+
+*Or check what are the next step with "Modular" smart-accounts, and the intent concept.*
